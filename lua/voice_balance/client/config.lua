@@ -3,8 +3,8 @@ CreateClientConVar( "voicebalancer_volume", 30, true, true, "Preferred voice vol
 CreateClientConVar( "voicebalancer_graph_enabled", 1, true, true, "Enable/disable the line graph on player mic boxes", 0, 1 )
 CreateClientConVar( "voicebalancer_graph_alpha", 60, true, true, "Alpha for the line graph", 0, 255 )
 CreateClientConVar( "voicebalancer_percent_enabled", 1, true, true, "Enable/disable the voice percentage on player mic boxes", 0, 1 )
-CreateClientConVar( "voicebalancer_percent_font", "DermaDefaultBolt", true, true, "What font to use for the voice percentages" )
 CreateClientConVar( "voicebalancer_samples", 225, true, true, "How many historic samples to store", 33, 1200 )
+CreateClientConVar( "voicebalancer_percent_font", "DermaDefaultBold", true, true, "What font to use for the voice percentages" )
 CreateClientConVar( "voicebalancer_increase_rate", 0.65, true, true, "How much to modify the rate of volume-increase for player voice", 0.1, 1 )
 
 local function populatePanel( panel )
