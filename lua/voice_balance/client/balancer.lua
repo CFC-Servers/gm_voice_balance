@@ -124,7 +124,9 @@ local function voiceEndWatcher( ply )
 
     if p then
         timer.Create( resetTimerName( ply ), 2, 1, function()
-            ply:SetVoiceVolumeScale( p )
+            if IsValid( ply ) then
+                ply:SetVoiceVolumeScale( p )
+            end
         end )
     end
 
