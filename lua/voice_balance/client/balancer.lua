@@ -110,6 +110,8 @@ end
 
 -- PlayerStartVoice
 local function voiceStartWatcher( ply )
+    if not IsValid( ply ) then return end
+
     timer.Remove( resetTimerName( ply ) )
 
     -- Keep track of the volume they started at
