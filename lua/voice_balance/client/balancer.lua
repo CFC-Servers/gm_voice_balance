@@ -23,7 +23,12 @@ local addCB = function( cvar, cb )
     end, "VoiceBalancer")
 end
 
-local enabled = GetConVar( "voicebalancer_enabled" ):GetBool()
+-- Set at the bottom
+local setup
+local teardown
+
+-- Cvars --
+local enabled = GetConVar( "voicebalancer_enabled" )
 addCB( enabled, function( n, o )
     enabled = tobool( n )
 
@@ -33,6 +38,7 @@ addCB( enabled, function( n, o )
         teardown()
     end
 end )
+enabled = enabled:GetBool()
 
 local volume = GetConVar( "voicebalancer_volume" )
 addCB( volume, function(n) volume = tonumber(n) end )
@@ -55,9 +61,13 @@ addCB( percentEnabled, function(n) percentEnabled = tobool(n) end )
 percentEnabled = percentEnabled:GetBool()
 
 local percentFont = GetConVar( "voicebalancer_percent_font" )
-addCB( percentFont, function(n) percentFont = tobool(n) end )
+addCB( percentFont, function(n) percentFont = tostring(n) end )
 percentFont = percentFont:GetString()
 
+
+--
+-- Voice Balancing
+--
 
 local tracked = {}
 
@@ -83,6 +93,10 @@ local function resetTimerName( ply )
     return "VoiceBalance_Reset_" .. ply:SteamID64()
 end
 
+
+--
+-- Hooks
+--
 
 -- PlayerStartVoice
 local function voiceStartWatcher( ply )
@@ -120,6 +134,10 @@ local function thinkWatcher()
 end
 
 
+--
+-- VGUI
+--
+
 -- TODO: Configurable colors
 local GREEN = Color( 0, 225, 0 )
 local YELLOW = Color( 225, 225, 0 )
@@ -135,6 +153,11 @@ local function getScaleColor( scale )
 
     return RED
 end
+
+
+--
+-- VoiceNotify Wraps
+--
 
 local VN = VoiceNotify
 
@@ -186,7 +209,7 @@ local customPaint = function( self, w, h )
     if not graphEnabled then return end
 
     -- TODO: Store this somewhere
-    local perSegment = w / self.scaleSamples
+    local perSegment = w / sampleCount
 
     local lastX = nil
     local lastY = nil
@@ -211,6 +234,10 @@ local customPaint = function( self, w, h )
     end
 end
 
+--
+-- Init
+--
+
 VN._Paint = VN._Paint or VN.Paint
 
 local function addHooks()
@@ -226,13 +253,22 @@ local function removeHooks()
     hook.Remove( "PlayerEndVoice", "VoiceBalancer" )
 end
 
-local function setup()
+local function updateCurrentPaint( paint )
+    for _, v in ipairs(g_VoicePanelList:GetChildren()) do
+        v.Paint = paint
+    end
+end
+
+
+setup = function()
     VN.Paint = customPaint
+    updateCurrentPaint( customPaint )
     addHooks()
 end
 
-local function teardown()
+teardown = function()
     VN.Paint = VN._Paint
+    updateCurrentPaint( VN._Paint )
     removeHooks()
 end
 
