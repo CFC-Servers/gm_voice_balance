@@ -285,6 +285,11 @@ teardown = function()
     VN.Paint = VN._Paint
     updateCurrentPaint( VN._Paint )
     removeHooks()
+
+    for ply, vol in pairs( tracked ) do
+        ply:SetVoiceVolumeScale( vol )
+        timer.Remove( resetTimerName( ply ) )
+    end
 end
 
 if enabled then setup() end
