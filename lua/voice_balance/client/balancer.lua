@@ -123,7 +123,7 @@ local function voiceEndWatcher( ply )
     local p = tracked[ply]
 
     if p then
-        timer.Create( resetTimerName( ply ), 1, 1, function()
+        timer.Create( resetTimerName( ply ), 2, 1, function()
             ply:SetVoiceVolumeScale( p )
         end )
     end
