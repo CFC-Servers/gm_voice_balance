@@ -1,5 +1,5 @@
 CreateClientConVar( "voicebalancer_enabled", 1, true, true, "Is VoiceBalancer enabled?", 0, 1 )
-CreateClientConVar( "voicebalancer_volume", 50, true, true, "Preferred voice volume", 0, 100 )
+CreateClientConVar( "voicebalancer_volume", 30, true, true, "Preferred voice volume", 0, 100 )
 CreateClientConVar( "voicebalancer_graph_enabled", 1, true, true, "Enable/disable the line graph on player mic boxes", 0, 1 )
 CreateClientConVar( "voicebalancer_graph_alpha", 60, true, true, "Alpha for the line graph", 0, 255 )
 CreateClientConVar( "voicebalancer_percent_enabled", 1, true, true, "Enable/disable the voice percentage on player mic boxes", 0, 1 )
