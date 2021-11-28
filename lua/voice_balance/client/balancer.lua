@@ -20,7 +20,7 @@ local addCB = function( cvar, cb )
         if new == old then return end
 
         cb( new )
-    end, "VoiceBalancer")
+    end, "VoiceBalancer" )
 end
 
 -- Set at the bottom
@@ -40,9 +40,14 @@ addCB( enabled, function( n, o )
 end )
 enabled = enabled:GetBool()
 
+-- Treats 1 to 100 as 0 to 0.4
+local translateVolume = function( n )
+    return ( n / 100 ) * 0.4
+end
+
 local volume = GetConVar( "voicebalancer_volume" )
-addCB( volume, function(n) volume = tonumber(n) end )
-volume = volume:GetFloat()
+addCB( volume, function(n) volume = translateVolume( n ) end )
+volume = translateVolume( volume:GetFloat() )
 
 local sampleCount = GetConVar( "voicebalancer_samples" )
 addCB( sampleCount, function(n) sampleCount = tonumber(n) end  )
@@ -55,6 +60,10 @@ increaseRate = increaseRate:GetFloat()
 local graphEnabled = GetConVar( "voicebalancer_graph_enabled" )
 addCB( graphEnabled, function(n) graphEnabled = tobool(n) end )
 graphEnabled = graphEnabled:GetBool()
+
+local graphAlpha = GetConVar( "voicebalancer_graph_alpha" )
+addCB( graphAlpha, function(n) graphAlpha = tonumber(n) end )
+graphAlpha = graphAlpha:GetInt()
 
 local percentEnabled = GetConVar( "voicebalancer_percent_enabled" )
 addCB( percentEnabled, function(n) percentEnabled = tobool(n) end )
@@ -85,6 +94,7 @@ local checkVoice = function( ply )
 
     local newScale = scale * scaleMod
     newScale = Clamp( newScale, 0, tracked[ply] )
+    newScale = Round( newScale, 4 )
 
     ply:SetVoiceVolumeScale( newScale )
 end
@@ -213,24 +223,27 @@ local customPaint = function( self, w, h )
 
     local lastX = nil
     local lastY = nil
+    local lastScale = nil
     local historyCount = #self.scaleHistory
 
     for i = historyCount, 1, -1 do
         local scale = self.scaleHistory[i]
 
         local x = w - ( i * perSegment )
-        local y = ( h - 3 ) * scale
+        local y = ( h - 2 ) * scale
 
-        if lastX and lastY then
-            local col = getScaleColor( scale )
+        if lastX and lastY and lastScale then
+            local median = ( scale + lastScale ) / 2
+            local col = getScaleColor( median )
             local r, g, b = col:Unpack()
 
-            SetDrawColor( r, g, b, 75 )
+            SetDrawColor( r, g, b, graphAlpha )
             DrawLine( lastX, lastY, x, y )
         end
 
         lastX = x
         lastY = y
+        lastScale = scale
     end
 end
 
@@ -254,7 +267,9 @@ local function removeHooks()
 end
 
 local function updateCurrentPaint( paint )
-    for _, v in ipairs(g_VoicePanelList:GetChildren()) do
+    if not g_VoicePanelList then return end
+
+    for _, v in ipairs( g_VoicePanelList:GetChildren() ) do
         v.Paint = paint
     end
 end
