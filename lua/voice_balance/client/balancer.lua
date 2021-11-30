@@ -40,9 +40,9 @@ addCB( enabled, function( n, o )
 end )
 enabled = enabled:GetBool()
 
--- Treats 1 to 100 as 0 to 0.4
+-- Treats 1 to 100 as 0 to 0.6
 local translateVolume = function( n )
-    return ( n / 100 ) * 0.4
+    return ( n / 100 ) * 0.6
 end
 
 local volume = GetConVar( "voicebalancer_volume" )
