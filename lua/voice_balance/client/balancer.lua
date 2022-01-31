@@ -1,6 +1,7 @@
 local IsValid = IsValid
 local Clamp = math.Clamp
 local Round = math.Round
+local Remap = math.Remap
 local tableInsert = table.insert
 local tableRemove = table.remove
 local tostring = tostring
@@ -45,7 +46,7 @@ end )
 enabled = enabled:GetBool()
 
 local translateVolume = function( n )
-    return math.Remap( n, 0, 100, 0, 0.6 )
+    return Remap( n, 0, 100, 0, 0.6 )
 end
 
 local volume = GetConVar( "voicebalancer_volume" )
