@@ -45,7 +45,7 @@ end )
 enabled = enabled:GetBool()
 
 local translateVolume = function( n )
-    return math.Remap( n, 0, 0.6, 0, 100 )
+    return math.Remap( n, 0, 100, 0, 0.6 )
 end
 
 local volume = GetConVar( "voicebalancer_volume" )
