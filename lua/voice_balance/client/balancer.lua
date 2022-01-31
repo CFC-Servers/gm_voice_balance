@@ -208,7 +208,7 @@ local customPaint = function( self, w, h )
         drawGraph = graphEnabled and loopback
     end
 
-    if graphEnabled then
+    if drawGraph then
         RoundedBox( 4, 0, 0, w, h, VOICE_BG )
     else
         RoundedBox( 4, 0, 0, w, h, Color( 0, self.ply:VoiceVolume() * 255, 0, 240 ) )
@@ -229,7 +229,7 @@ local customPaint = function( self, w, h )
         )
     end
 
-    if not graphEnabled then return end
+    if not drawGraph then return end
 
     -- TODO: Store this somewhere
     local perSegment = w / sampleCount
