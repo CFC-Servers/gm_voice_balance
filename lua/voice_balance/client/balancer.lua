@@ -31,7 +31,7 @@ local teardown
 -- Cvars --
 local loopback = GetConVar( "voice_loopback" )
 addCB( loopback, function( n, o ) loopback = tobool( n ) end )
-loopback = tobool( loopback )
+loopback = loopback:GetBool()
 
 local enabled = GetConVar( "voicebalancer_enabled" )
 addCB( enabled, function( n, o )
