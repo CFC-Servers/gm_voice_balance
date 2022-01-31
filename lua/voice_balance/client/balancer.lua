@@ -203,9 +203,14 @@ end
 local customPaint = function( self, w, h )
     if not IsValid( self.ply ) then return end
 
+    local isMe = self.ply == LocalPlayer()
+
     local drawGraph = graphEnabled
-    if self.ply == LocalPlayer() then
+    local drawPercent = percentEnabled
+
+    if isMe then
         drawGraph = graphEnabled and loopback
+        drawPercent = drawPercent and loopback
     end
 
     if drawGraph then
@@ -216,7 +221,7 @@ local customPaint = function( self, w, h )
 
     local avg = self:updateAvgScale()
 
-    if percentEnabled then
+    if drawPercent then
         local scale = Round( avg * 100 )
         local scaleStr = tostring( scale ) .. "%"
         local scaleColor = getScaleColor( avg )
