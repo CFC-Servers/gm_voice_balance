@@ -28,6 +28,10 @@ local setup
 local teardown
 
 -- Cvars --
+local loopback = GetConVar( "voice_loopback" )
+addCB( loopback, function( n, o ) loopback = tobool( n ) end )
+loopback = tobool( loopback )
+
 local enabled = GetConVar( "voicebalancer_enabled" )
 addCB( enabled, function( n, o )
     enabled = tobool( n )
@@ -40,9 +44,8 @@ addCB( enabled, function( n, o )
 end )
 enabled = enabled:GetBool()
 
--- Treats 1 to 100 as 0 to 0.6
 local translateVolume = function( n )
-    return ( n / 100 ) * 0.6
+    return math.Remap( n, 0, 0.6, 0, 100 )
 end
 
 local volume = GetConVar( "voicebalancer_volume" )
@@ -198,6 +201,11 @@ end
 
 local customPaint = function( self, w, h )
     if not IsValid( self.ply ) then return end
+
+    local drawGraph = graphEnabled
+    if self.ply == LocalPlayer() then
+        drawGraph = graphEnabled and loopback
+    end
 
     if graphEnabled then
         RoundedBox( 4, 0, 0, w, h, VOICE_BG )
