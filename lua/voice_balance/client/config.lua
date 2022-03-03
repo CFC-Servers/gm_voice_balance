@@ -5,7 +5,7 @@ CreateClientConVar( "voicebalancer_graph_alpha", 60, true, true, "Alpha for the 
 CreateClientConVar( "voicebalancer_percent_enabled", 1, true, true, "Enable/disable the voice percentage on player mic boxes", 0, 1 )
 CreateClientConVar( "voicebalancer_samples", 225, true, true, "How many historic samples to store", 33, 1200 )
 CreateClientConVar( "voicebalancer_percent_font", "DermaDefaultBold", true, true, "What font to use for the voice percentages" )
-CreateClientConVar( "voicebalancer_increase_rate", 0.65, true, true, "How much to modify the rate of volume-increase for player voice", 0.1, 1 )
+CreateClientConVar( "voicebalancer_increase_rate", 0.5, true, true, "How much to modify the rate of volume-increase for player voice", 0.1, 1 )
 
 local function populatePanel( panel )
     panel:ControlHelp( "" )
@@ -21,9 +21,14 @@ local function populatePanel( panel )
 
     panel:Help( "Voice Volume sets your preferred volume to hear other players at. All player voices will be adjusted to this value. 50 is the average player voice volume.")
     panel:NumSlider( "Voice Volume", "voicebalancer_volume", 0, 100, 1 )
+
     panel:Help( "Sample Size determines how many historic samples to keep. This affects the length of the line graph and the averaging of the percentage. Larger values can affect performance.")
     panel:NumSlider( "Sample Size", "voicebalancer_samples", 33, 1200, 0 )
+
     panel:NumSlider( "Line Graph Alpha", "voicebalancer_graph_alpha", 0, 255, 0 )
+
+    panel:Help( "Regeneration Rate determines how quickly loud players regain their volume. Lower values means they stay quieter for longer.")
+    panel:NumSlider( "Regeneration Rate", "voicebalancer_increase_rate", 0.1, 1, 2 )
 end
 
 hook.Add( "AddToolMenuCategories", "VoiceBalancer_Config", function()
